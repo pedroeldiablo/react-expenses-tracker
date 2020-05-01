@@ -22,6 +22,24 @@ exports.getTransactions = async (req, res, next) => {
    }
 }
 
+exports.getTransaction = async (req, res, next) => {
+    try {
+        const transactions = await Transaction.findById(req.params.id);
+        
+        return res.status(200).json({
+            success: true,
+            data: transactions
+        })
+    
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            error: 'Server Error'
+        });
+    
+    }
+ }
+
 // @desc Add transactions
 // @route POST /api/v1/transactions
 // @access Public
@@ -83,4 +101,42 @@ exports.deleteTransaction = async (req, res, next) => {
     });
       
   }
+}
+
+exports.updateTransaction = async (req, res, next) => {
+    try {
+        const transaction = await Transaction.findByIdAndUpdate(req.params.id, req.body, function(err, result){
+
+            if(err){
+                res.send(err)
+            }
+            else{
+                res.send(result)
+            }
+    
+        })
+
+        if(!transaction){
+            return res.status(404).json({
+                success: false,
+                error: "No transaction found"
+            });
+        }
+
+        // console.log("controlleer", transaction);
+
+        return res.status(201).json({
+            success: true,
+            data: transaction
+
+        })
+        
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            error: 'Server Error'
+        });
+        
+    }
+
 }

@@ -36,6 +36,28 @@ export const GlobalProvider = ({children}) => {
         }
     }
 
+    async function getTransaction(id) {
+      console.log({id});
+      try {
+          console.log('Get transaction', id);
+          const res = await axios.get(`api/v1/transactions/${id}`);
+
+          console.log('Get response', res)
+
+          // dispatch({
+          //     type: 'GET_TRANSACTIONS',
+          //     payload: res.data.data
+          // })
+      
+      } catch (err) {
+          dispatch({
+              type: 'TRANSACTION_ERROR',
+              payload: err.response.data.error
+          })
+      
+      }
+  }
+
     async function deleteTransaction(id) {
         try {
           await axios.delete(`/api/v1/transactions/${id}`);
@@ -49,6 +71,36 @@ export const GlobalProvider = ({children}) => {
             type: 'TRANSACTION_ERROR',
             payload: err.response.data.error
           });
+        }
+      }
+
+      async function updateTransaction(transaction) {
+        console.log({transaction});
+        const update = {
+          ...transaction,
+          text: "hello"
+        }
+
+        const config = {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        } 
+        console.log({update});
+        try {
+          await axios.post(`/api/v1/transactions/${transaction._id}`, update, config)
+
+          dispatch({
+            type: 'UPDATE_TRANSACTION',
+            payload: update
+          });
+        
+        } catch (err) {
+          dispatch({
+            type: 'TRANSACTION_ERROR',
+            payload: err.response.data.error
+          });
+        
         }
       }
 
@@ -80,7 +132,9 @@ export const GlobalProvider = ({children}) => {
             error: state.error,
             loading: state.loading,
             getTransactions,
-            deleteTransaction, 
+            getTransaction,
+            deleteTransaction,
+            updateTransaction, 
             addTransaction
             }}>
             {children}

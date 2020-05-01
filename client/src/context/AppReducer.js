@@ -17,6 +17,17 @@ export const AppReducer = (state, action) => {
                 ...state,
                 transactions: [...state.transactions, action.payload]
             }
+
+        case 'UPDATE_TRANSACTION':
+            return {
+                ...state,
+                transactions: state.transactions.map(transaction => {
+                    if (transaction._id === action.payload._id) {
+                    return action.payload
+                    }
+                    return transaction
+                })
+            }
         case 'TRANSACTION_ERROR':
             return {
                 ...state,
