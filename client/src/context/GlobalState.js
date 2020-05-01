@@ -74,21 +74,25 @@ export const GlobalProvider = ({children}) => {
         }
       }
 
+      function editTransaction(transaction) {
+        console.log({transaction});
+      }
+
+
       async function updateTransaction(transaction) {
         console.log({transaction});
         const update = {
           ...transaction,
-          text: "hello"
         }
 
-        const config = {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        } 
+        // const config = {
+        //   headers: {
+        //     'Content-Type': 'application/json'
+        //   }
+        // } 
         console.log({update});
         try {
-          await axios.post(`/api/v1/transactions/${transaction._id}`, update, config)
+          await axios.post(`/api/v1/transactions/${transaction._id}`, update)
 
           dispatch({
             type: 'UPDATE_TRANSACTION',
@@ -134,6 +138,7 @@ export const GlobalProvider = ({children}) => {
             getTransactions,
             getTransaction,
             deleteTransaction,
+            editTransaction,
             updateTransaction, 
             addTransaction
             }}>
